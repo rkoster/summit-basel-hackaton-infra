@@ -1,0 +1,28 @@
+concourse_lb_ip: 35.242.243.254
+concourse_target_pool: basel-2018-shared-concourse
+director__concourse_domain: 35.242.243.254
+director__internal_ip: 10.0.0.6
+director__tags:
+- basel-2018-shared-bosh-director
+- basel-2018-shared-concourse-open
+- concourse
+director__target_pool: basel-2018-shared-concourse
+director_address: https://35.198.126.223:25555
+director_name: bosh-basel-2018-shared
+external_ip: 35.198.126.223
+internal_cidr: 10.0.0.0/16
+internal_gw: 10.0.0.1
+internal_tag_name: basel-2018-shared-internal
+jumpbox__internal_ip: 10.0.0.5
+jumpbox__tags:
+- basel-2018-shared-bosh-open
+- basel-2018-shared-jumpbox
+jumpbox_url: 35.198.126.223:22
+kube_master_tcp_lb_ip: 35.242.254.204
+kube_master_tcp_target_pool_name: basel-2018-shared-kube-master-tcp
+kube_worker_tcp_lb_ip: 35.234.80.160
+kube_worker_tcp_target_pool_name: basel-2018-shared-kube-worker-tcp
+network: basel-2018-shared-network
+subnetwork: basel-2018-shared-subnet
+subnetwork_reserved_ips: 10.0.0.1-10.0.0.255
+subnetwork_static_ips: 10.0.255.0-10.0.255.254
