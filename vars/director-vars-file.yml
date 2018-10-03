@@ -14,9 +14,17 @@ kube_master_tcp_target_pool_name: basel-2018-shared-kube-master-tcp
 kube_worker_tcp_lb_ip: 35.234.80.160
 kube_worker_tcp_target_pool_name: basel-2018-shared-kube-worker-tcp
 network: basel-2018-shared-network
+router_backend_service: basel-2018-shared-router-lb
+router_lb_ip: 35.241.26.200
+ssh_proxy_lb_ip: 35.242.193.60
+ssh_proxy_target_pool: basel-2018-shared-cf-ssh-proxy
 subnetwork: basel-2018-shared-subnet
 tags:
 - basel-2018-shared-bosh-director
 - basel-2018-shared-concourse-open
 - concourse
 target_pool: basel-2018-shared-concourse
+tcp_router_lb_ip: 35.242.196.118
+tcp_router_target_pool: basel-2018-shared-cf-tcp-router
+ws_lb_ip: 35.198.96.120
+ws_target_pool: basel-2018-shared-cf-ws

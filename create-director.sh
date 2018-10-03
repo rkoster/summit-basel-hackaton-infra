@@ -1,5 +1,5 @@
 #!/bin/sh
-/usr/local/bin/bosh2 create-env \
+bosh create-env \
   ${BBL_STATE_DIR}/bosh-deployment/bosh.yml \
   --state  ${BBL_STATE_DIR}/vars/bosh-state.json \
   --vars-store  ${BBL_STATE_DIR}/vars/director-vars-store.yml \
