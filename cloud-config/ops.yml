@@ -450,6 +450,26 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: lb
+    name: cf-router-network-properties
     cloud_properties:
-      target_pool: ((concourse_target_pool))
+      backend_service: ((router_backend_service))
+      target_pool: ((ws_target_pool))
+      tags:
+      - ((router_backend_service))
+      - ((ws_target_pool))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: diego-ssh-proxy-network-properties
+    cloud_properties:
+      target_pool: ((ssh_proxy_target_pool))
+      tags:
+      - ((ssh_proxy_target_pool))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: cf-tcp-router-network-properties
+    cloud_properties:
+      target_pool: ((tcp_router_target_pool))
+      tags:
+      - ((tcp_router_target_pool))

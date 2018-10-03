@@ -1,5 +1,5 @@
 #!/bin/sh
-bosh create-env \
+/usr/local/bin/bosh2 create-env \
   ${BBL_STATE_DIR}/jumpbox-deployment/jumpbox.yml \
   --state  ${BBL_STATE_DIR}/vars/jumpbox-state.json \
   --vars-store  ${BBL_STATE_DIR}/vars/jumpbox-vars-store.yml \
