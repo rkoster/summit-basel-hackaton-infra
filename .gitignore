@@ -1,2 +1,5 @@
 bucc-shared.key.json
 .terraform
+bbl-state.json
+bucc-shared-gcp.json
+env
