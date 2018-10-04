@@ -3,3 +3,4 @@ bucc-shared.key.json
 bbl-state.json
 bucc-shared-gcp.json
 env
+export_env.sh
