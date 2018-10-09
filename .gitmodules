@@ -1,6 +1,3 @@
 [submodule "bucc"]
 	path = bucc
 	url = https://github.com/starkandwayne/bucc
-[submodule "summit-hands-on-labs"]
-	path = summit-hands-on-labs
-	url = https://github.com/cloudfoundry/summit-hands-on-labs
