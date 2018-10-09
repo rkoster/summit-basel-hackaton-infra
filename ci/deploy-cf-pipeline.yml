@@ -5,6 +5,7 @@ jobs:
     - get: stemcell
     - get: cf-deployment
     - get: scale-cf-opsfile
+    - get: expose-silk
   - put: deploy
     params:
       manifest: cf-deployment/cf-deployment.yml
@@ -13,6 +14,7 @@ jobs:
       - cf-deployment/operations/scale-to-one-az.yml
       - cf-deployment/operations/use-compiled-releases.yml
       - scale-cf-opsfile/scale.yml
+      - expose-silk/expose-silk.yml
       vars:
         system_domain: 35.241.17.126.sslip.io
 
@@ -31,7 +33,17 @@ resources:
     content:
       - type: replace
         path: /instance_groups/name=diego-cell/instances
-        value: 4
+        value: 1
+
+- name: expose-silk
+  type: file
+  source:
+    filename: expose-silk.yml
+    content:
+      - type: replace
+        path: /instance_groups/name=diego-api/jobs/name=silk-controller/provides?
+        value:
+          cf_network: {as: cf_network, shared: true }
 
 - name: stemcell
   type: bosh-io-stemcell

@@ -4,6 +4,8 @@ jobs:
   - aggregate:
     - get: stemcell
     - get: labs
+    - get: silk-cni
+    - get: scale
   - task: pre-merge-template
     config:
       platform: linux
@@ -33,6 +35,8 @@ jobs:
       ops_files:
       - labs/basel-2018/kibosh-the-ultimate-service-broker/setup/kubo-deployment/manifests/ops-files/use-runtime-config-bosh-dns.yml
       - labs/basel-2018/kibosh-the-ultimate-service-broker/setup/kubo-deployment/manifests/ops-files/add-hostname-to-master-certificate.yml
+      - silk-cni/silk-cni.yml
+      - scale/scale.yml
       vars:
         api-hostname: 35.234.73.217
         worker-hostname: 35.198.102.57
@@ -73,6 +77,73 @@ resources:
     client_secret: ((bosh_client_secret))
     ca_cert: ((bosh_ca_cert))
 
+- name: silk-cni
+  type: file
+  source:
+    filename: silk-cni.yml
+    content:
+    - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: silk-cni
+        release: silk
+        consumes:
+          cf_network: { from: cf_network, deployment: cf }
+        properties:
+          dns_servers:
+          - 169.254.0.2
+    - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: vxlan-policy-agent
+        release: silk
+        properties:
+          ca_cert: "((/((bosh_name))/cf/network_policy_ca.certificate))"
+          client_cert: "((/((bosh_name))/cf/network_policy_client.certificate))"
+          client_key: "((/((bosh_name))/cf/network_policy_client.private_key))"
+    - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: silk-daemon
+        release: silk
+        consumes:
+          cf_network: { from: cf_network, deployment: cf }
+        properties:
+          ca_cert: ((/((bosh_name))/cf/silk_ca.certificate))
+          client_cert: ((/((bosh_name))/cf/silk_daemon.certificate))
+          client_key: ((/((bosh_name))/cf/silk_daemon.private_key))
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-bin-dir?
+      value: /var/vcap/packages/silk-cni/bin
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-conf-dir?
+      value: /var/vcap/jobs/silk-cni/config/cni
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/network-plugin?
+      value: silk
+    - type: replace
+      path: /releases/-
+      value:
+        name: silk
+        sha1: 09997e05467b96bb44cd7363bc77fa224e89075e
+        stemcell:
+          os: ubuntu-xenial
+          version: "97.19"
+        url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-2.16.0-ubuntu-xenial-97.19-20181002-231717-792781445.tgz
+        version: 2.16.0
+
+- name: scale
+  type: file
+  source:
+    filename: scale.yml
+    content:
+    - type: replace
+      path: /instance_groups/name=master/instances
+      value: 1
+    - type: replace
+      path: /instance_groups/name=worker/instances
+      value: 1
+
 resource_types:
 - name: bosh-deployment
   type: docker-image
@@ -84,3 +155,9 @@ resource_types:
   type: docker-image
   source:
     repository: cfcommunity/bosh2-errand-resource
+
+- name: file
+  type: docker-image
+  source:
+    repository: aequitas/concourse-file-resource
+    tag: latest
