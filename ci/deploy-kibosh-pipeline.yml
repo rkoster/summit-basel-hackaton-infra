@@ -83,6 +83,34 @@ resources:
     filename: silk-cni.yml
     content:
     - type: replace
+      path: /addons?/-
+      value:
+        name: bosh-dns-aliases
+        jobs:
+        - name: bosh-dns-aliases
+          release: bosh-dns-aliases
+          properties:
+            aliases:
+            - domain: policy-server.service.cf.internal
+              targets:
+              - query: '*'
+                instance_group: api
+                deployment: cf
+                network: default
+                domain: bosh
+            - domain: silk-controller.service.cf.internal
+              targets:
+              - query: '*'
+                instance_group: diego-api
+                deployment: cf
+                network: default
+                domain: bosh
+    - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: bpm
+        release: bpm
+    - type: replace
       path: /instance_groups/name=worker/jobs/-
       value:
         name: silk-cni
@@ -131,6 +159,16 @@ resources:
           version: "97.19"
         url: https://storage.googleapis.com/cf-deployment-compiled-releases/silk-2.16.0-ubuntu-xenial-97.19-20181002-231717-792781445.tgz
         version: 2.16.0
+    - type: replace
+      path: /releases/-
+      value:
+        name: bosh-dns-aliases
+        sha1: f2f4963ff44a8034c051f1fc5b8060d0e971b258
+        stemcell:
+          os: ubuntu-xenial
+          version: "97.19"
+        url: https://storage.googleapis.com/cf-deployment-compiled-releases/bosh-dns-aliases-0.0.3-ubuntu-xenial-97.19-20181002-230802-865325675.tgz
+        version: 0.0.3
 
 - name: scale
   type: file
@@ -142,7 +180,7 @@ resources:
       value: 1
     - type: replace
       path: /instance_groups/name=worker/instances
-      value: 1
+      value: 2
 
 resource_types:
 - name: bosh-deployment
