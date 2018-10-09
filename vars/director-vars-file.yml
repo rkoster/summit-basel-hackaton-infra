@@ -1,0 +1,34 @@
+concourse_domain: 35.242.248.253
+concourse_lb_ip: 35.242.248.253
+concourse_target_pool: basel-2018-hackaton-concourse
+director_address: https://35.198.136.234:25555
+director_name: bosh-basel-2018-hackaton
+external_ip: 35.198.136.234
+internal_cidr: 10.0.0.0/16
+internal_gw: 10.0.0.1
+internal_ip: 10.0.0.6
+internal_tag_name: basel-2018-hackaton-internal
+jumpbox_url: 35.198.136.234:22
+kube_master_tcp_lb_ip: 35.234.73.217
+kube_master_tcp_target_pool_name: basel-2018-hackaton-kube-master-tcp
+kube_master_tcp_target_pool_tags:
+- basel-2018-hackaton-kube-master-tcp
+kube_worker_tcp_lb_ip: 35.198.102.57
+kube_worker_tcp_target_pool_name: basel-2018-hackaton-kube-worker-tcp
+kube_worker_tcp_target_pool_tags:
+- basel-2018-hackaton-kube-worker-tcp
+network: basel-2018-hackaton-network
+router_backend_service: basel-2018-hackaton-router-lb
+router_lb_ip: 35.241.17.126
+ssh_proxy_lb_ip: 35.234.79.237
+ssh_proxy_target_pool: basel-2018-hackaton-cf-ssh-proxy
+subnetwork: basel-2018-hackaton-subnet
+tags:
+- basel-2018-hackaton-bosh-director
+- basel-2018-hackaton-concourse-open
+- concourse
+target_pool: basel-2018-hackaton-concourse
+tcp_router_lb_ip: 35.242.254.208
+tcp_router_target_pool: basel-2018-hackaton-cf-tcp-router
+ws_lb_ip: 35.198.176.60
+ws_target_pool: basel-2018-hackaton-cf-ws
