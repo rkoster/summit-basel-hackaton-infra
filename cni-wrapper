@@ -1,0 +1,11 @@
+#!/bin/bash
+# echo -e $(env) >> /tmp/cni.log
+# cat ${CNI_NETNS} >> /tmp/cni.log
+exec >  >(tee -ia /tmp/cni.log)
+exec 2> >(tee -ia /tmp/cni.log >&2)
+echo <&0 > /tmp/ns
+echo $NAMESPACE >> /tmp/ns
+ip netns add "$NAMESPACE"
+/var/vcap/packages/silk-cni/bin/silk-real <&0   | sed 's/"interface": 1,/"interface": 4,/g' | tee -a /tmp
+/sed.log
+
