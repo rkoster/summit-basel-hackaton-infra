@@ -147,8 +147,14 @@ resources:
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-conf-dir?
       value: /var/vcap/jobs/silk-cni/config/cni
     - type: replace
-      path: /instance_groups/name=worker/jobs/name=kubelet/properties/network-plugin?
-      value: silk
+      path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/pod-network-cidr?
+      value: 10.255.0.0/16
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
+      value: silk-vtep
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/flannel?
+      value: false
     - type: replace
       path: /releases/-
       value:
@@ -169,6 +175,13 @@ resources:
           version: "97.19"
         url: https://storage.googleapis.com/cf-deployment-compiled-releases/bosh-dns-aliases-0.0.3-ubuntu-xenial-97.19-20181002-230802-865325675.tgz
         version: 0.0.3
+    - type: replace
+      path: /releases/name=kubo
+      value:
+        name: kubo
+        version: latest
+
+
 
 - name: scale
   type: file
@@ -180,7 +193,7 @@ resources:
       value: 1
     - type: replace
       path: /instance_groups/name=worker/instances
-      value: 2
+      value: 1
 
 resource_types:
 - name: bosh-deployment
