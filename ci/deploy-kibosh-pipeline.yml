@@ -105,6 +105,10 @@ resources:
                 deployment: cf
                 network: default
                 domain: bosh
+    - type: remove
+      path: /instance_groups/name=master/jobs/name=flanneld
+    - type: remove
+      path: /instance_groups/name=worker/jobs/name=flanneld
     - type: replace
       path: /instance_groups/name=worker/jobs/-
       value:
@@ -179,7 +183,7 @@ resources:
       path: /releases/name=kubo
       value:
         name: kubo
-        version: latest
+        version: 0.22.0+dev.2
 
 
 
