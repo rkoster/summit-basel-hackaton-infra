@@ -160,6 +160,9 @@ resources:
       path: /instance_groups/name=worker/jobs/name=docker/properties/flannel?
       value: false
     - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/silk?
+      value: true
+    - type: replace
       path: /releases/-
       value:
         name: silk
@@ -184,8 +187,11 @@ resources:
       value:
         name: kubo
         version: 0.22.0+dev.2
-
-
+    - type: replace
+      path: /releases/name=docker
+      value:
+        name: docker
+        version: latest
 
 - name: scale
   type: file
