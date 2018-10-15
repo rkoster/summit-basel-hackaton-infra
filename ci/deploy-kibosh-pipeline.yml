@@ -203,7 +203,7 @@ resources:
       value: 1
     - type: replace
       path: /instance_groups/name=worker/instances
-      value: 1
+      value: 2
 
 resource_types:
 - name: bosh-deployment
