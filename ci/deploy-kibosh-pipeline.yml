@@ -164,7 +164,7 @@ resources:
         release: silk-cfcr-patches
     - type: replace
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-bin-dir?
-      value: /var/vcap/packages/cni/bin,/var/vcap/packages/silk-cni/bin
+      value: /var/vcap/packages/cni/bin,/var/vcap/jobs/silk-cni-wrapper/bin
     - type: replace
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-conf-dir?
       value: /var/vcap/jobs/silk-cni/config/cni
