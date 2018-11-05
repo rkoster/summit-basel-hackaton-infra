@@ -2,7 +2,7 @@ jobs:
 - name: deploy-kibosh
   plan:
   - aggregate:
-    - get: stemcell
+    - get: stemcell-97
     - get: labs
     - get: silk-cni
     - get: scale
@@ -33,7 +33,7 @@ jobs:
   - put: deploy
     params:
       manifest: merged/base.yml
-      stemcells: [ stemcell/stemcell.tgz ]
+      stemcells: [ stemcell-97/stemcell.tgz ]
       ops_files:
       - labs/basel-2018/kibosh-the-ultimate-service-broker/setup/kubo-deployment/manifests/ops-files/use-runtime-config-bosh-dns.yml
       - labs/basel-2018/kibosh-the-ultimate-service-broker/setup/kubo-deployment/manifests/ops-files/add-hostname-to-master-certificate.yml
@@ -55,9 +55,11 @@ resources:
     submodules:
       - basel-2018/kibosh-the-ultimate-service-broker/setup/kubo-deployment
 
-- name: stemcell
+- name: stemcell-97
   type: bosh-io-stemcell
-  source: { name: ((bosh_stemcell)) }
+  source: 
+    name: ((bosh_stemcell))
+    version_family: 97.19.latest
 
 - name: deploy
   type: bosh-deployment
@@ -206,7 +208,7 @@ resources:
       value: 1
     - type: replace
       path: /instance_groups/name=worker/instances
-      value: 2
+      value: 1
 
 - name: kubo-release
   type: git
