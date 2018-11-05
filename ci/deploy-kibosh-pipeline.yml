@@ -8,6 +8,8 @@ jobs:
     - get: scale
     - get: kubo-release
       trigger: true
+    - get: docker-release
+      trigger: true
   - task: pre-merge-template
     config:
       platform: linux
@@ -161,6 +163,12 @@ resources:
       path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
       value: silk-vtep
     - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/ip_masq?
+      value: true
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/iptables?
+      value: true
+    - type: replace
       path: /instance_groups/name=worker/jobs/name=docker/properties/flannel?
       value: false
     - type: replace
@@ -196,7 +204,8 @@ resources:
       path: /releases/name=docker
       value:
         name: docker
-        version: latest
+        version: create
+        url: file:///tmp/build/put/docker-release
 
 - name: scale
   type: file
@@ -214,6 +223,10 @@ resources:
   type: git
   source:
     uri: https://github.com/rkoster/kubo-release
+- name: docker-release
+  type: git
+  source:
+    uri: https://github.com/rkoster/docker-boshrelease
 
 resource_types:
 - name: bosh-deployment
