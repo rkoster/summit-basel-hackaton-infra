@@ -10,6 +10,8 @@ jobs:
       trigger: true
     - get: docker-release
       trigger: true
+    - get: silk-cfcr-patches-release
+      trigger: true
   - task: pre-merge-template
     config:
       platform: linux
@@ -59,7 +61,7 @@ resources:
 
 - name: stemcell-97
   type: bosh-io-stemcell
-  source: 
+  source:
     name: ((bosh_stemcell))
     version_family: 97.19.latest
 
@@ -151,6 +153,16 @@ resources:
           client_cert: ((/((bosh_name))/cf/silk_daemon.certificate))
           client_key: ((/((bosh_name))/cf/silk_daemon.private_key))
     - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: silk-cni-wrapper
+        release: silk-cfcr-patches
+    - type: replace
+      path: /instance_groups/name=worker/jobs/-
+      value:
+        name: silk-nsenter-wrapper
+        release: silk-cfcr-patches
+    - type: replace
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-bin-dir?
       value: /var/vcap/packages/cni/bin,/var/vcap/packages/silk-cni/bin
     - type: replace
@@ -206,6 +218,12 @@ resources:
         name: docker
         version: create
         url: file:///tmp/build/put/docker-release
+    - type: replace
+      path: /releases/-
+      value:
+        name: silk-cfcr-patches-release
+        version: create
+        url: file:///tmp/build/put/silk-cfcr-patches-release
 
 - name: scale
   type: file
@@ -223,10 +241,16 @@ resources:
   type: git
   source:
     uri: https://github.com/rkoster/kubo-release
+
 - name: docker-release
   type: git
   source:
     uri: https://github.com/rkoster/docker-boshrelease
+
+- name: silk-cfcr-patches-release
+  type: git
+  source:
+    uri: https://github.com/rkoster/silk-cfcr-patches-release
 
 resource_types:
 - name: bosh-deployment
