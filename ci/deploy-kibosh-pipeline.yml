@@ -152,16 +152,31 @@ resources:
           ca_cert: ((/((bosh_name))/cf/silk_ca.certificate))
           client_cert: ((/((bosh_name))/cf/silk_daemon.certificate))
           client_key: ((/((bosh_name))/cf/silk_daemon.private_key))
+
+    - type: replace
+      path: /instance_groups/name=master/jobs/name=kube-apiserver/provides?
+      value: 
+         kube-apiserver: {as: kube-apiserver}
+
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/provides?
+      value: 
+         kubernetes-workers: {as: kubernetes-workers}
+
     - type: replace
       path: /instance_groups/name=worker/jobs/-
       value:
         name: silk-cni-wrapper
-        release: silk-cfcr-patches
+        release: silk-cfcr-patches-release
+        consumes:
+          kube-apiserver: {from: kube-apiserver}
+          kubernetes-workers: {from: kubernetes-workers}
+  
     - type: replace
       path: /instance_groups/name=worker/jobs/-
       value:
         name: silk-nsenter-wrapper
-        release: silk-cfcr-patches
+        release: silk-cfcr-patches-release
     - type: replace
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-bin-dir?
       value: /var/vcap/packages/cni/bin,/var/vcap/jobs/silk-cni-wrapper/bin
