@@ -191,6 +191,9 @@ resources:
       path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/pod-network-cidr?
       value: 10.255.0.0/16
     - type: replace
+      path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/proxy-mode?
+      value: iptables
+    - type: replace
       path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
       value: silk-vtep
     - type: replace
@@ -265,6 +268,7 @@ resources:
   type: git
   source:
     uri: https://github.com/rkoster/docker-boshrelease
+    branch: silk
 
 - name: silk-cfcr-patches-release
   type: git
