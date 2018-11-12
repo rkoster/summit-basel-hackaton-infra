@@ -188,6 +188,12 @@ resources:
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-conf-dir?
       value: /var/vcap/jobs/silk-cni/config/cni
     - type: replace
+      path: /instance_groups/name=master/jobs/name=kube-apiserver/properties/allow_privileged?
+      value: true
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/allow_privileged?
+      value: true
+    - type: replace
       path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/pod-network-cidr?
       value: 10.255.0.0/16
     - type: replace
