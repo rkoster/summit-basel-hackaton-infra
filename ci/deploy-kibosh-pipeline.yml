@@ -203,12 +203,6 @@ resources:
       path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
       value: silk-vtep
     - type: replace
-      path: /instance_groups/name=worker/jobs/name=docker/properties/ip_masq?
-      value: true
-    - type: replace
-      path: /instance_groups/name=worker/jobs/name=docker/properties/iptables?
-      value: true
-    - type: replace
       path: /instance_groups/name=worker/jobs/name=docker/properties/flannel?
       value: false
     - type: replace
