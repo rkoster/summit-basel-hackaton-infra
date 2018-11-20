@@ -120,6 +120,33 @@ resources:
       path: /instance_groups/name=master/jobs/name=flanneld
     - type: remove
       path: /instance_groups/name=worker/jobs/name=flanneld
+#################
+    - type: replace
+      path: /instance_groups/name=master/jobs/-
+      value:
+        name: silk-daemon
+        release: silk
+        consumes:
+          cf_network: { from: cf_network, deployment: cf }
+          vpa: { from: master-vpa }
+        properties:
+          ca_cert: ((/((bosh_name))/cf/silk_ca.certificate))
+          client_cert: ((/((bosh_name))/cf/silk_daemon.certificate))
+          client_key: ((/((bosh_name))/cf/silk_daemon.private_key))
+    - type: replace
+      path: /instance_groups/name=master/jobs/-
+      value:
+        name: vxlan-policy-agent
+        release: silk
+        provides:
+          vpa: {as: master-vpa} #rename to avoid bosh multiple link provider error
+        properties:
+          ca_cert: "((/((bosh_name))/cf/network_policy_ca.certificate))"
+          client_cert: "((/((bosh_name))/cf/network_policy_client.certificate))"
+          client_key: "((/((bosh_name))/cf/network_policy_client.private_key))"
+
+
+################
     - type: replace
       path: /instance_groups/name=worker/jobs/-
       value:
@@ -132,6 +159,7 @@ resources:
         release: silk
         consumes:
           cf_network: { from: cf_network, deployment: cf }
+          vpa: { from: worker-vpa }
         properties:
           iptables_logging: true
           dns_servers:
@@ -141,6 +169,8 @@ resources:
       value:
         name: vxlan-policy-agent
         release: silk
+        provides:
+          vpa: { as: worker-vpa }
         properties:
           ca_cert: "((/((bosh_name))/cf/network_policy_ca.certificate))"
           client_cert: "((/((bosh_name))/cf/network_policy_client.certificate))"
@@ -152,6 +182,7 @@ resources:
         release: silk
         consumes:
           cf_network: { from: cf_network, deployment: cf }
+          vpa: { from: worker-vpa }
         properties:
           ca_cert: ((/((bosh_name))/cf/silk_ca.certificate))
           client_cert: ((/((bosh_name))/cf/silk_daemon.certificate))
@@ -188,26 +219,32 @@ resources:
       path: /instance_groups/name=worker/jobs/name=kubelet/properties/cni-conf-dir?
       value: /var/vcap/jobs/silk-cni/config/cni
     - type: replace
-      path: /instance_groups/name=master/jobs/name=kube-apiserver/properties/allow_privileged?
-      value: true
-    - type: replace
-      path: /instance_groups/name=worker/jobs/name=kubelet/properties/allow_privileged?
-      value: true
-    - type: replace
-      path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/pod-network-cidr?
-      value: 10.255.0.0/16
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/hairpin-mode?
+      value: "hairpin-veth"
     - type: replace
       path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/proxy-mode?
       value: iptables
     - type: replace
-      path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
-      value: silk-vtep
+      path: /instance_groups/name=worker/jobs/name=kube-proxy/properties/silk-dynamic-cidr?
+      value: true
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=kubelet/properties/silk-dynamic-cidr?
+      value: true
+#    - type: replace
+#      path: /instance_groups/name=worker/jobs/name=docker/properties/bridge?
+#      value: silk-vtep
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/iptables?
+      value: false
+    - type: replace
+      path: /instance_groups/name=worker/jobs/name=docker/properties/ip_masq?
+      value: false
     - type: replace
       path: /instance_groups/name=worker/jobs/name=docker/properties/flannel?
       value: false
     - type: replace
       path: /instance_groups/name=worker/jobs/name=docker/properties/silk?
-      value: true
+      value: false
     - type: replace
       path: /releases/-
       value:
