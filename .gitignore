@@ -2,5 +2,10 @@ bucc-shared.key.json
 .terraform
 bbl-state.json
 bucc-shared-gcp.json
+key
 env
 export_env.sh
+key
+vars/bbl.tfvars
+vars/director-vars-store.yml
+vars/jumpbox-vars-store.yml
