@@ -44,8 +44,8 @@ jobs:
       - silk-cni/silk-cni.yml
       - scale/scale.yml
       vars:
-        api-hostname: 35.234.73.217
-        worker-hostname: 35.198.102.57
+        api-hostname: 35.198.87.57
+        worker-hostname: 35.198.131.21
   - put: bosh-errand
     params:
       name: apply-addons

@@ -16,7 +16,7 @@ jobs:
       - scale-cf-opsfile/scale.yml
       - expose-silk/expose-silk.yml
       vars:
-        system_domain: 35.241.17.126.sslip.io
+        system_domain: 34.95.73.196.sslip.io
 
 resources:
 - name: cf-deployment
